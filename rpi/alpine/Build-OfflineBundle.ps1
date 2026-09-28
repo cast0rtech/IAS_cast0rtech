@@ -95,16 +95,25 @@ Set-Content -Path "$BootFsDir\usercfg.txt" -Value $UserCfg
 $ReleaseZip = "$OutputDir\ema-alpine-offline-airgap.zip"
 if (Test-Path $ReleaseZip) { Remove-Item -Force $ReleaseZip }
 
-Write-Host "[5/5] Compressing full offline release into: $ReleaseZip..." -ForegroundColor Yellow
+Write-Host "[5/6] Compressing full offline release into: $ReleaseZip..." -ForegroundColor Yellow
 Compress-Archive -Path "$BootFsDir\*" -DestinationPath $ReleaseZip -CompressionLevel Optimal
 
+# 7. Generate Raw .img for Balena Etcher / Raspberry Pi Imager
+Write-Host "[6/6] Generating bootable .img for Balena Etcher and Raspberry Pi Imager..." -ForegroundColor Yellow
+$PythonCmd = "$RepoRoot\.venv\Scripts\python.exe"
+if (-not (Test-Path $PythonCmd)) { $PythonCmd = "python" }
+
+& $PythonCmd "$PSScriptRoot\build-raw-image.py"
+
 Write-Host "=====================================================================" -ForegroundColor Green
-Write-Host "SUCCESS: 100% Offline Air-Gapped Package Created!" -ForegroundColor Green
-Write-Host "File: $ReleaseZip" -ForegroundColor Cyan
+Write-Host "SUCCESS: Flashable Images & Offline Package Created!" -ForegroundColor Green
+Write-Host "Balena / Pi Imager Image: $OutputDir\ema-alpine-os.img.zip" -ForegroundColor Cyan
+Write-Host "Raw Disk Image:           $OutputDir\ema-alpine-os.img" -ForegroundColor Cyan
+Write-Host "FAT32 Extracted Archive:  $ReleaseZip" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "How to use in an isolated/air-gapped plant:" -ForegroundColor White
-Write-Host "1. Format any SD card in FAT32." -ForegroundColor White
-Write-Host "2. Extract all contents of '$ReleaseZip' to the SD card." -ForegroundColor White
-Write-Host "3. Insert the SD card into the Raspberry Pi and power on." -ForegroundColor White
-Write-Host "   Boot takes 3 seconds directly into RAM with ZERO internet required!" -ForegroundColor White
+Write-Host "How to flash with Balena Etcher or Raspberry Pi Imager:" -ForegroundColor White
+Write-Host "1. Open Balena Etcher or Raspberry Pi Imager." -ForegroundColor White
+Write-Host "2. Select 'Flash from file' / 'Use Custom' and pick:" -ForegroundColor White
+Write-Host "   $OutputDir\ema-alpine-os.img.zip" -ForegroundColor White
+Write-Host "3. Choose your SD Card and click Flash!" -ForegroundColor White
 Write-Host "=====================================================================" -ForegroundColor Green

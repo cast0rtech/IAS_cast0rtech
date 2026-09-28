@@ -67,19 +67,24 @@ El script descargará los binarios del kernel oficial aarch64, generará el over
 
 ## 4. Cómo Flashear la Tarjeta SD
 
-### Método Rápido (Cualquier Sistema Operativo: Windows, Mac, Linux):
-1. Inserta la tarjeta SD en tu ordenador.
-2. Formatea la tarjeta en **FAT32** con cualquier herramienta estándar (ej. *SD Card Formatter* o el formateador de Windows).
-3. Descomprime el contenido de `dist/alpine-ema-os/ema-alpine-os-aarch64.zip` **directamente en la raíz de la tarjeta SD**.
-4. Expulsa la tarjeta SD, insértala en la Raspberry Pi y conéctala a la alimentación.
-5. En 3 segundos estará en marcha.
+### Método 1: Balena Etcher o Raspberry Pi Imager (El Más Cómodo - 1 Clic):
+1. Descarga y abre **Balena Etcher** o **Raspberry Pi Imager**.
+2. Selecciona **Flash from file** (o *Use custom* en Raspberry Pi Imager).
+3. Selecciona la imagen generada:
+   `dist/alpine-ema-os/ema-alpine-os.img.zip` (o el archivo `.img` directo).
+4. Elige tu tarjeta MicroSD.
+5. Haz clic en **Flash!**. Balena grabará el MBR, la partición FAT32 y los flags de arranque de forma automática.
+6. Inserta la MicroSD en tu Raspberry Pi y enciéndela: arrancará en 3 segundos.
 
-### Método Avanzado con Doble Partición (Recomendado para Persistencia Industrial):
-Utiliza el script automatizado para crear la partición de arranque (FAT32) y la partición de datos persistentes (ext4):
+### Método 2: Descompresión Directa en FAT32:
+1. Conecta la tarjeta SD a tu PC y formatéala en **FAT32**.
+2. Descomprime el contenido de `dist/alpine-ema-os/ema-alpine-offline-airgap.zip` directamente en la raíz de la tarjeta SD.
+3. Insértala en la Raspberry Pi y conéctale alimentación.
 
+### Método 3: Script con Doble Partición (Linux / Mac / WSL):
 ```bash
 sudo ./rpi/alpine/flash-sd.sh /dev/sdX
-# (Sustituye /dev/sdX por el dispositivo de tu tarjeta SD)
+# (Crea Partición 1 FAT32 y Partición 2 ext4 para /data)
 ```
 
 ---

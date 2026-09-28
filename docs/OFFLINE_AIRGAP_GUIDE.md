@@ -28,19 +28,18 @@ El archivo generado `dist/alpine-ema-os/ema-alpine-offline-airgap.zip` (peso apr
 
 ## 2. Cómo Flashear la Tarjeta SD (Sin Internet)
 
-### En 3 sencillos pasos desde Windows, Mac o Linux:
+### Método 1: Balena Etcher o Raspberry Pi Imager (Recomendado - 1 Clic):
+1. Abre **Balena Etcher** o **Raspberry Pi Imager**.
+2. Haz clic en **Flash from file** (o *Use custom* en Raspberry Pi Imager).
+3. Selecciona el archivo:
+   `dist/alpine-ema-os/ema-alpine-os.img.zip` (o el archivo `.img` directo).
+4. Elige tu tarjeta MicroSD y pulsa **Flash!**.
+5. Inserta la MicroSD en la Raspberry Pi y conéctale alimentación: arrancará en **3 segundos** en RAM.
 
-1. **Formatear la tarjeta MicroSD**:
-   - Conecta la tarjeta SD a tu ordenador.
-   - Formatea la tarjeta en formato **FAT32** (o utiliza la herramienta oficial *SD Card Formatter*).
-2. **Copiar los archivos**:
-   - Descomprime el archivo:
-     `dist/alpine-ema-os/ema-alpine-offline-airgap.zip`
-   - Copia **todo su contenido directamente a la raíz de la tarjeta MicroSD**.
-3. **Encender la Raspberry Pi**:
-   - Inserta la tarjeta SD en la Raspberry Pi.
-   - Conecta el cable de red Ethernet al switch/equipo industrial y dale alimentación.
-   - La Raspberry Pi cargará el sistema operativo directamente en la memoria RAM en **3 segundos**.
+### Método 2: Descompresión Directa en FAT32:
+1. Conecta la tarjeta SD a tu ordenador y formatéala en **FAT32**.
+2. Descomprime `dist/alpine-ema-os/ema-alpine-offline-airgap.zip` y copia **todo su contenido directamente en la raíz de la tarjeta MicroSD**.
+3. Insértala en la Raspberry Pi y dale alimentación.
 
 El panel de supervisión estará disponible inmediatamente en tu navegador:
 - **Dashboard Web**: `http://<ip-de-la-raspberry>:8080`
