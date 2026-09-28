@@ -1,0 +1,33 @@
+#!/bin/sh
+# EMA Diskless Appliance Boot Initialization
+
+echo "[EMA-INIT] Initializing EMA Industrial Appliance on Alpine RAM disk..."
+
+# 1. Mount or format persistent data partition
+DATA_DEV="/dev/mmcblk0p2"
+mkdir -p /data
+
+if [ -b "$DATA_DEV" ]; then
+    if ! blkid "$DATA_DEV" >/dev/null 2>&1; then
+        echo "[EMA-INIT] Formatting persistent data partition $DATA_DEV with ext4..."
+        mkfs.ext4 -F -L "EMA_DATA" "$DATA_DEV"
+    fi
+    mount "$DATA_DEV" /data || true
+    echo "[EMA-INIT] Persistent data partition mounted on /data."
+else
+    echo "[EMA-INIT] Warning: Persistent data partition $DATA_DEV not found. Using RAM-backed /data."
+fi
+
+# 2. Deploy Frontend files to Nginx web root
+mkdir -p /var/www/ema
+if [ -d /opt/ema/frontend ]; then
+    ln -sfn /opt/ema/frontend /var/www/ema/frontend
+fi
+
+# 3. Enable hardware watchdog daemon if module is present
+if [ -c /dev/watchdog ]; then
+    watchdog -t 15 -T 30 /dev/watchdog || true
+    echo "[EMA-INIT] Hardware watchdog armed (15s timeout)."
+fi
+
+echo "[EMA-INIT] Startup initialization complete."

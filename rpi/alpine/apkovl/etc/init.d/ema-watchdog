@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+description="EMA Health Watchdog Service"
+
+command="/opt/ema/rpi/scripts/ema-watchdog.sh"
+command_background=true
+pidfile="/run/ema-watchdog.pid"
+output_log="/var/log/ema-watchdog.log"
+error_log="/var/log/ema-watchdog.err"
+
+depend() {
+    need ema-backend nginx
+}

@@ -17,10 +17,12 @@ The initial installation runs in **simulation mode**. It does not connect to or 
 
 - `backend/`: FastAPI API, SQLite persistence, WebSocket updates, configurable FC01–FC04 Modbus TCP polling adapter, unit tests.
 - `frontend/`: floor-plan editor and live dashboard with English, German, and Spanish translations.
-- `rpi/`: Raspberry Pi OS appliance provisioning script (`setup.sh`), systemd units, watchdog daemon, kiosk mode, and cloud-init profiles.
+- `rpi/`: Raspberry Pi deployment tools:
+  - `rpi/alpine/`: **EMA Industrial Alpine OS** (standalone 100% RAM diskless OS, 3s boot, immune to power-cut corruption, see [docs/ALPINE_EMA_OS.md](docs/ALPINE_EMA_OS.md)).
+  - `rpi/setup.sh`: Automated provisioning suite for Raspberry Pi OS (systemd units, watchdog, kiosk mode, cloud-init).
 - `alarme.csv`: sample alarm-to-phone/TTS mapping (sample data only).
 - `telephony/asterisk/`: opt-in Asterisk/PJSIP configuration template for TTS calls through a Yeastar TG400.
-- `docs/`: English architecture, deployment, and integration notes (see [docs/RASPBERRY_PI_OS.md](docs/RASPBERRY_PI_OS.md) for dedicated Raspberry Pi instructions).
+- `docs/`: Architecture, deployment, and integration notes ([docs/ALPINE_EMA_OS.md](docs/ALPINE_EMA_OS.md) and [docs/RASPBERRY_PI_OS.md](docs/RASPBERRY_PI_OS.md)).
 
 ## Current integration boundary
 

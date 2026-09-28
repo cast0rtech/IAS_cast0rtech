@@ -1,0 +1,28 @@
+#!/sbin/openrc-run
+description="EMA Alarm Management Backend Service"
+
+command="/usr/bin/python3"
+command_args="-m uvicorn app.main:app --host 127.0.0.1 --port 8000"
+command_background=true
+pidfile="/run/ema-backend.pid"
+directory="/opt/ema/backend"
+output_log="/var/log/ema-backend.log"
+error_log="/var/log/ema-backend.err"
+
+depend() {
+    need net localmount
+    after firewall
+}
+
+start_pre() {
+    checkpath -d -m 0755 -o root:root /var/log
+    checkpath -d -m 0755 -o root:root /data
+    checkpath -d -m 0755 -o root:root /var/lib/asterisk/sounds/ema
+    if [ -f /opt/ema/.env ]; then
+        set -a
+        . /opt/ema/.env
+        set +a
+    fi
+    export EMA_DATABASE_PATH="${EMA_DATABASE_PATH:-/data/ema.db}"
+    export EMA_CSV_PATH="${EMA_CSV_PATH:-/opt/ema/alarme.csv}"
+}
