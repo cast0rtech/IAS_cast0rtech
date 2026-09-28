@@ -1,0 +1,22 @@
+[Unit]
+Description=EMA Alarm Management and Telemetry Stack
+Documentation=https://github.com/IAS_cast0rtech
+Requires=docker.service
+After=docker.service network-online.target time-sync.target
+Wants=network-online.target time-sync.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/ema
+EnvironmentFile=-/opt/ema/.env
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
+ExecReload=/usr/bin/docker compose up -d
+TimeoutStartSec=300
+TimeoutStopSec=60
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

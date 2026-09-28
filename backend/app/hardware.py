@@ -35,22 +35,26 @@ async def poll_modbus(stop: asyncio.Event):
                         if not client.connected:
                             continue
                         # Addresses are decimal, zero-based Modbus PDU offsets.
-                        raw_address = point.address.strip().upper()
-                        address = int(raw_address[1:]) - 1 if raw_address.startswith("M") and raw_address[1:].isdigit() else int(raw_address)
-                        if address < 0 or address > 65535:
+                        try:
+                            raw_address = point.address.strip().upper()
+                            address = int(raw_address[1:]) - 1 if raw_address.startswith("M") and raw_address[1:].isdigit() else int(raw_address)
+                            if address < 0 or address > 65535:
+                                continue
+                        except ValueError:
+                            log.warning("Invalid address %r for point %s", point.address, point.id)
                             continue
                         fc = point.function_code
                         if fc == 1:
-                            result = await client.read_coils(address, count=1, device_id=point.unit_id)
+                            result = await client.read_coils(address, count=1, slave=point.unit_id)
                             value = bool(result.bits[0]) if not result.isError() else None
                         elif fc == 2:
-                            result = await client.read_discrete_inputs(address, count=1, device_id=point.unit_id)
+                            result = await client.read_discrete_inputs(address, count=1, slave=point.unit_id)
                             value = bool(result.bits[0]) if not result.isError() else None
                         elif fc == 3:
-                            result = await client.read_holding_registers(address, count=1, device_id=point.unit_id)
+                            result = await client.read_holding_registers(address, count=1, slave=point.unit_id)
                             value = (int(result.registers[0]) == 1) if not result.isError() else None
                         else:  # FC04
-                            result = await client.read_input_registers(address, count=1, device_id=point.unit_id)
+                            result = await client.read_input_registers(address, count=1, slave=point.unit_id)
                             value = (int(result.registers[0]) == 1) if not result.isError() else None
                         if value is not None and value != point.state:
                             point.state = value

@@ -15,11 +15,12 @@ The initial installation runs in **simulation mode**. It does not connect to or 
 
 ## Components
 
-- `backend/`: FastAPI API, SQLite persistence, WebSocket updates, configurable FC01–FC04 Modbus TCP polling adapter.
+- `backend/`: FastAPI API, SQLite persistence, WebSocket updates, configurable FC01–FC04 Modbus TCP polling adapter, unit tests.
 - `frontend/`: floor-plan editor and live dashboard with English, German, and Spanish translations.
+- `rpi/`: Raspberry Pi OS appliance provisioning script (`setup.sh`), systemd units, watchdog daemon, kiosk mode, and cloud-init profiles.
 - `alarme.csv`: sample alarm-to-phone/TTS mapping (sample data only).
 - `telephony/asterisk/`: opt-in Asterisk/PJSIP configuration template for TTS calls through a Yeastar TG400.
-- `docs/`: English architecture, deployment, and integration notes.
+- `docs/`: English architecture, deployment, and integration notes (see [docs/RASPBERRY_PI_OS.md](docs/RASPBERRY_PI_OS.md) for dedicated Raspberry Pi instructions).
 
 ## Current integration boundary
 

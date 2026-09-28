@@ -21,8 +21,12 @@ NUMBER_RE = re.compile(r"^\+?[0-9]{6,20}$")
 
 
 def alarm_map() -> dict[str, dict[str, str]]:
-    with open(CSV_PATH, newline="", encoding="utf-8-sig") as stream:
-        return {row["Register_Modbus"].strip(): row for row in csv.DictReader(stream, delimiter=";")}
+    path = Path(CSV_PATH)
+    if not path.exists():
+        log.warning("Alarm CSV file not found at %s", CSV_PATH)
+        return {}
+    with open(path, newline="", encoding="utf-8-sig") as stream:
+        return {row["Register_Modbus"].strip(): row for row in csv.DictReader(stream, delimiter=";") if "Register_Modbus" in row}
 
 
 def csv_key(register: str) -> str:

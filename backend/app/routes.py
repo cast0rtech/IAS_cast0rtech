@@ -13,6 +13,14 @@ def list_points(session: Session = Depends(get_session)):
     return session.exec(select(DataPoint).order_by(DataPoint.id)).all()
 
 
+@router.get("/points/{point_id}", response_model=DataPoint)
+def get_point(point_id: int, session: Session = Depends(get_session)):
+    point = session.get(DataPoint, point_id)
+    if point is None:
+        raise HTTPException(status_code=404, detail="Point not found")
+    return point
+
+
 @router.post("/points", response_model=DataPoint, status_code=201)
 async def create_point(payload: DataPointCreate, session: Session = Depends(get_session)):
     point = DataPoint.model_validate(payload)
