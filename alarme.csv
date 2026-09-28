@@ -1,0 +1,5 @@
+Register_Modbus;Alarm_Type;Destination_Number;TTS_Language;TTS_Text
+M1;Door_Intrusion;REPLACE_WITH_APPROVED_NUMBER;de;"Achtung. Einbruchalarm an der Haupttür ausgelöst."
+M2;Technical_Fire;REPLACE_WITH_APPROVED_NUMBER;de;"Feueralarm im Technikraum detektiert."
+M3;Basement_Water;REPLACE_WITH_APPROVED_NUMBER;de;"Wassermelder im Untergeschoss aktiv."
+M4;Outdoor_Movement;REPLACE_WITH_APPROVED_NUMBER;de;"Bewegung auf dem Vorplatz registriert."

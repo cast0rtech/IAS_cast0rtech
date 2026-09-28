@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>EMA Control Panel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside id="sidebar">
+    <header><div class="brand">EMA</div><div><h1 data-i18n="title">Alarm control</h1><p class="muted" data-i18n="subtitle">Monitoring dashboard</p></div></header>
+    <label class="language-label" for="language" data-i18n="language">Language</label>
+    <select id="language" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option><option value="es">Español</option></select>
+    <div class="mode-row"><button id="editMode" class="mode active" data-i18n="edit">Edit</button><button id="liveMode" class="mode" data-i18n="live">Live</button></div>
+    <section id="editControls"><h2 data-i18n="floorPlan">Floor plan</h2><label class="upload"><span data-i18n="upload">Upload image</span><input type="file" id="mapUpload" accept="image/*"></label><p class="hint" data-i18n="mapHint">Click the floor plan to add a point.</p></section>
+    <section class="point-heading"><h2><span data-i18n="dataPoints">Data points</span> <span id="pointCount" class="count">0</span></h2></section>
+    <div id="pointsList" class="points-list"></div>
+    <button id="simulate" class="simulate" data-i18n="simulate">Simulate alarm</button>
+    <div class="connection"><span id="connectionDot"></span><span id="connectionText" data-i18n="connecting">Connecting…</span></div>
+  </aside>
+  <main id="mapArea"><p id="placeholder" data-i18n="emptyMap">Upload a floor plan to get started</p><div id="mapContainer"><img id="floorPlan" alt="Facility floor plan"><div id="markers"></div></div></main>
+  <script src="app.js"></script>
+</body>
+</html>

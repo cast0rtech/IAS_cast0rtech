@@ -1,0 +1,44 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      EMA_CSV_PATH: /app/alarme.csv
+    volumes:
+      - ema-data:/data
+      - ema-audio:/var/lib/asterisk/sounds/ema
+      - ./alarme.csv:/app/alarme.csv:ro
+    ports:
+      - "8000:8000"
+    # Hardware access is deliberately not privileged by default. Add only the
+    # specific device mappings and Linux capabilities required by your setup.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  frontend:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  asterisk:
+    build: ./telephony/asterisk
+    restart: unless-stopped
+    profiles: ["telephony"]
+    volumes:
+      - ema-audio:/var/lib/asterisk/sounds/ema
+    ports:
+      - "5060:5060/udp"
+      - "10000-10100:10000-10100/udp"
+      - "127.0.0.1:5038:5038/tcp"
+    # Opt-in only: configure and bench-test the PBX/gateway before enabling.
+volumes:
+  ema-data:
+  ema-audio:
