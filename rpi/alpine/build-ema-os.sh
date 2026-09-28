@@ -65,6 +65,12 @@ cp -r "$REPO_ROOT/rpi" "$APKOVL_TMP/opt/ema/"
 cp "$REPO_ROOT/alarme.csv" "$APKOVL_TMP/opt/ema/"
 [ -f "$REPO_ROOT/.env" ] && cp "$REPO_ROOT/.env" "$APKOVL_TMP/opt/ema/" || cp "$REPO_ROOT/.env.example" "$APKOVL_TMP/opt/ema/.env"
 
+# Embed offline Python wheels for 100% air-gapped installation
+if [ -d "$(dirname "${BASH_SOURCE[0]}")/wheels" ]; then
+    mkdir -p "$APKOVL_TMP/opt/ema/vendor/wheels"
+    cp "$(dirname "${BASH_SOURCE[0]}")/wheels"/*.whl "$APKOVL_TMP/opt/ema/vendor/wheels/" 2>/dev/null || true
+fi
+
 # Compress overlay into hostname.apkovl.tar.gz
 HOSTNAME="ema-gateway"
 echo "$HOSTNAME" > "$APKOVL_TMP/etc/hostname"

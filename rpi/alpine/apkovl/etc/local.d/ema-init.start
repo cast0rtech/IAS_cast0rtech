@@ -18,13 +18,30 @@ else
     echo "[EMA-INIT] Warning: Persistent data partition $DATA_DEV not found. Using RAM-backed /data."
 fi
 
-# 2. Deploy Frontend files to Nginx web root
+# 2. Configure Offline APK Repository and Cache if present on SD boot partition
+BOOT_MOUNT="/media/mmcblk0p1"
+if [ -d "$BOOT_MOUNT/cache" ] || [ -d "$BOOT_MOUNT/apks" ]; then
+    echo "[EMA-INIT] Setting up offline local APK package cache..."
+    mkdir -p /etc/apk/cache
+    ln -sfn "$BOOT_MOUNT/cache" /etc/apk/cache 2>/dev/null || true
+    if [ -d "$BOOT_MOUNT/apks" ]; then
+        echo "$BOOT_MOUNT/apks" > /etc/apk/repositories
+    fi
+fi
+
+# 3. Offline Python dependencies installation from local wheelhouse (air-gap)
+if [ -d /opt/ema/vendor/wheels ] && [ -f /opt/ema/backend/requirements.txt ]; then
+    echo "[EMA-INIT] Installing backend dependencies from offline wheelhouse..."
+    python3 -m pip install --no-index --find-links=/opt/ema/vendor/wheels -r /opt/ema/backend/requirements.txt >/var/log/pip-offline.log 2>&1 || true
+fi
+
+# 4. Deploy Frontend files to Nginx web root
 mkdir -p /var/www/ema
 if [ -d /opt/ema/frontend ]; then
     ln -sfn /opt/ema/frontend /var/www/ema/frontend
 fi
 
-# 3. Enable hardware watchdog daemon if module is present
+# 5. Enable hardware watchdog daemon if module is present
 if [ -c /dev/watchdog ]; then
     watchdog -t 15 -T 30 /dev/watchdog || true
     echo "[EMA-INIT] Hardware watchdog armed (15s timeout)."

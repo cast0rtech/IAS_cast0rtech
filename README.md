@@ -22,7 +22,7 @@ The initial installation runs in **simulation mode**. It does not connect to or 
   - `rpi/setup.sh`: Automated provisioning suite for Raspberry Pi OS (systemd units, watchdog, kiosk mode, cloud-init).
 - `alarme.csv`: sample alarm-to-phone/TTS mapping (sample data only).
 - `telephony/asterisk/`: opt-in Asterisk/PJSIP configuration template for TTS calls through a Yeastar TG400.
-- `docs/`: Architecture, deployment, and integration notes ([docs/ALPINE_EMA_OS.md](docs/ALPINE_EMA_OS.md) and [docs/RASPBERRY_PI_OS.md](docs/RASPBERRY_PI_OS.md)).
+- `docs/`: Architecture, deployment, and integration notes ([docs/ALPINE_EMA_OS.md](docs/ALPINE_EMA_OS.md), [docs/OFFLINE_AIRGAP_GUIDE.md](docs/OFFLINE_AIRGAP_GUIDE.md), and [docs/RASPBERRY_PI_OS.md](docs/RASPBERRY_PI_OS.md)).
 
 ## Current integration boundary
 
